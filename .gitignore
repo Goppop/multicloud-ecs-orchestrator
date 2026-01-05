@@ -1,0 +1,5 @@
+# Project exclude paths
+/multicloud-ecs-api/target/
+/multicloud-ecs-core/target/
+/multicloud-ecs-provider-aliyun/target/
+/multicloud-ecs-starter/target/

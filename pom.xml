@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>io.github.multicloud</groupId>
+    <artifactId>multicloud-ecs-orchestrator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>${project.artifactId}</name>
+    <description>
+        多云虚拟机调度框架（MultiCloud ECS Orchestrator）
+        提供统一、安全、可扩展的跨云虚拟机（ECS）创建与管理能力
+    </description>
+    
+    <url>https://github.com/your-username/multicloud-ecs-orchestrator</url>
+    
+    <modules>
+        <module>multicloud-ecs-api</module>
+        <module>multicloud-ecs-core</module>
+        <module>multicloud-ecs-provider-aliyun</module>
+        <module>multicloud-ecs-starter</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Spring Boot -->
+        <spring-boot.version>2.7.18</spring-boot.version>
+        
+        <!-- Lombok -->
+        <lombok.version>1.18.30</lombok.version>
+        
+        <!-- Validation -->
+        <validation-api.version>2.0.1.Final</validation-api.version>
+        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        
+        <!-- Jackson -->
+        <jackson.version>2.15.2</jackson.version>
+        
+        <!-- SLF4J -->
+        <slf4j.version>1.7.36</slf4j.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <!-- Lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            
+            <!-- Validation -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+            
+            <!-- Jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            
+            <!-- SLF4J -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            
+            <!-- 本项目模块 -->
+            <dependency>
+                <groupId>io.github.multicloud</groupId>
+                <artifactId>multicloud-ecs-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.multicloud</groupId>
+                <artifactId>multicloud-ecs-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.multicloud</groupId>
+                <artifactId>multicloud-ecs-provider-aliyun</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.multicloud</groupId>
+                <artifactId>multicloud-ecs-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
+

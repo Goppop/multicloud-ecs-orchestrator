@@ -1,0 +1,4 @@
+# Auto Configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.github.multicloud.ecs.provider.aliyun.AliyunEcsAutoConfiguration
+
