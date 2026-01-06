@@ -101,17 +101,28 @@ public class MultiCloudEcsAutoConfiguration {
      */
     @PostConstruct
     public void autoRegisterClients() {
+        log.info("[MultiCloudEcs] ========== 开始自动注册云厂商客户端 ==========");
         List<CloudEcsClient> clients = clientsProvider.getIfAvailable();
         if (clients != null && !clients.isEmpty()) {
+            log.info("[MultiCloudEcs] 发现 {} 个 CloudEcsClient Bean", clients.size());
             for (CloudEcsClient client : clients) {
-                if (!registry.isRegistered(client.getProviderCode())) {
+                String providerCode = client.getProviderCode();
+                log.info("[MultiCloudEcs] 处理客户端: providerCode={}, providerName={}, class={}, available={}",
+                        providerCode, client.getProviderName(), client.getClass().getSimpleName(), 
+                        client.isAvailable());
+                if (!registry.isRegistered(providerCode)) {
                     registry.register(client);
+                    log.info("[MultiCloudEcs] ✓ 客户端已注册: providerCode={}", providerCode);
+                } else {
+                    log.warn("[MultiCloudEcs] ✗ 客户端已存在，跳过注册: providerCode={}", providerCode);
                 }
             }
-            log.info("[MultiCloudEcs] 自动注册完成，已注册 {} 个云厂商客户端: {}",
+            log.info("[MultiCloudEcs] ========== 自动注册完成 ==========");
+            log.info("[MultiCloudEcs] 已注册 {} 个云厂商客户端: {}",
                     registry.size(), registry.getRegisteredProviderCodes());
         } else {
-            log.warn("[MultiCloudEcs] 未发现任何云厂商客户端，请检查配置");
+            log.warn("[MultiCloudEcs] ✗ 未发现任何云厂商客户端，请检查配置");
+            log.warn("[MultiCloudEcs] 请确认：1) 是否引入了provider模块 2) 是否配置了 enabled=true");
         }
     }
 }

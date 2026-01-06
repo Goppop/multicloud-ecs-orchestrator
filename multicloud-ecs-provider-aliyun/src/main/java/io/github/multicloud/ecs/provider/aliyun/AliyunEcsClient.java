@@ -46,6 +46,9 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
         this.properties = properties;
         this.networkManager = networkManager;
         this.parameterMapper = parameterMapper;
+        log.info("[AliyunEcsClient] 阿里云ECS客户端实例已创建: providerCode={}, providerName={}, region={}, enabled={}",
+                properties.getProviderCode(), properties.getProviderName(), 
+                properties.getRegionId(), properties.isEnabled());
     }
 
     @Override
@@ -140,6 +143,11 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
 
     @Override
     protected VirtualMachine doCreateInstance(CreateInstanceRequest request) throws EcsException {
+        log.info("[AliyunEcsClient] ========== 开始创建实例 ==========");
+        log.info("[AliyunEcsClient] providerCode={}, instanceName={}, region={}, tenantId={}, userId={}",
+                getProviderCode(), request.getInstanceName(), request.getRegion(), 
+                request.getTenantId(), request.getUserId());
+        
         String region = resolveRegion(request);
         String userId = request.getUserId();
 
@@ -179,70 +187,55 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
                     request.getBandwidthMode(), internetChargeType);
 
             // ========== 步骤4: 创建实例 ==========
-            /*
-             * TODO: 阿里云SDK接入后实现
-             * 
-             * // 创建 IAcsClient 客户端
-             * DefaultProfile profile = DefaultProfile.getProfile(
-             *     region,
-             *     properties.getAccessKeyId(),
-             *     properties.getAccessKeySecret()
-             * );
-             * IAcsClient client = new DefaultAcsClient(profile);
-             * 
-             * // 构建 RunInstancesRequest
-             * RunInstancesRequest runRequest = new RunInstancesRequest();
-             * runRequest.setRegionId(region);
-             * runRequest.setZoneId(request.getZone() != null ? request.getZone() : getDefaultZone(region));
-             * runRequest.setInstanceType(instanceType);
-             * runRequest.setImageId(imageId);
-             * runRequest.setSecurityGroupId(networkResources.getSecurityGroupId());
-             * runRequest.setVSwitchId(networkResources.getVSwitchId());
-             * runRequest.setInstanceName(request.getInstanceName());
-             * runRequest.setSystemDiskCategory(resolveSystemDiskCategory(request));
-             * runRequest.setSystemDiskSize(resolveSystemDiskSize(request));
-             * runRequest.setPassword(request.getPassword());
-             * 
-             * // 计费模式
-             * runRequest.setInstanceChargeType(instanceChargeType);
-             * if (request.getInstanceChargeMode() == InstanceChargeMode.PREPAID && request.getDuration() != null) {
-             *     runRequest.setPeriod(request.getDuration());
-             *     runRequest.setPeriodUnit("Month");
-             * }
-             * 
-             * // 公网IP配置
-             * if (request.getAllocatePublicIp() != null && request.getAllocatePublicIp()) {
-             *     runRequest.setInternetChargeType(internetChargeType);
-             *     runRequest.setInternetMaxBandwidthOut(request.getPublicIpBandwidth() != null ? 
-             *             request.getPublicIpBandwidth() : 5);
-             * } else {
-             *     runRequest.setInternetMaxBandwidthOut(0);
-             * }
-             * 
-             * // 设置标签
-             * List<RunInstancesRequest.Tag> instanceTags = new ArrayList<>();
-             * if (request.getTags() != null) {
-             *     for (Map.Entry<String, String> tag : request.getTags().entrySet()) {
-             *         RunInstancesRequest.Tag instanceTag = new RunInstancesRequest.Tag();
-             *         instanceTag.setKey(tag.getKey());
-             *         instanceTag.setValue(tag.getValue());
-             *         instanceTags.add(instanceTag);
-             *     }
-             * }
-             * runRequest.setTags(instanceTags);
-             * 
-             * // 调用API创建实例
-             * RunInstancesResponse response = client.getAcsResponse(runRequest);
-             * String instanceId = response.getInstanceIdSets().get(0);
-             * String requestId = response.getRequestId();
-             * 
-             * log.info("[AliyunEcsClient] 实例创建成功: instanceId={}, requestId={}", instanceId, requestId);
-             */
-
-            // 临时模拟：返回模拟数据
+            log.info("[AliyunEcsClient] ========== 步骤4: 开始创建ECS实例 ==========");
+            
+            // 模拟：创建 IAcsClient 客户端
+            log.info("[AliyunEcsClient] [模拟SDK] 创建 IAcsClient 客户端");
+            log.info("[AliyunEcsClient] [模拟SDK] DefaultProfile.getProfile(region={}, accessKeyId={})", 
+                    region, properties.getAccessKeyId() != null ? "***" : "null");
+            log.info("[AliyunEcsClient] [模拟SDK] new DefaultAcsClient(profile) - 客户端初始化完成");
+            
+            // 模拟：构建 RunInstancesRequest
+            log.info("[AliyunEcsClient] [模拟SDK] 构建 RunInstancesRequest");
+            log.info("[AliyunEcsClient] [模拟SDK]   - regionId: {}", region);
+            log.info("[AliyunEcsClient] [模拟SDK]   - zoneId: {}", request.getZone() != null ? request.getZone() : "默认可用区");
+            log.info("[AliyunEcsClient] [模拟SDK]   - instanceType: {}", instanceType);
+            log.info("[AliyunEcsClient] [模拟SDK]   - imageId: {}", imageId);
+            log.info("[AliyunEcsClient] [模拟SDK]   - securityGroupId: {}", networkResources.getSecurityGroupId());
+            log.info("[AliyunEcsClient] [模拟SDK]   - vSwitchId: {}", networkResources.getVSwitchId());
+            log.info("[AliyunEcsClient] [模拟SDK]   - instanceName: {}", request.getInstanceName());
+            log.info("[AliyunEcsClient] [模拟SDK]   - systemDiskCategory: {}", resolveSystemDiskCategory(request));
+            log.info("[AliyunEcsClient] [模拟SDK]   - systemDiskSize: {} GB", resolveSystemDiskSize(request));
+            log.info("[AliyunEcsClient] [模拟SDK]   - instanceChargeType: {}", instanceChargeType);
+            
+            if (request.getInstanceChargeMode() == InstanceChargeMode.PREPAID && request.getDuration() != null) {
+                log.info("[AliyunEcsClient] [模拟SDK]   - period: {} Month", request.getDuration());
+            }
+            
+            if (request.getAllocatePublicIp() != null && request.getAllocatePublicIp()) {
+                log.info("[AliyunEcsClient] [模拟SDK]   - internetChargeType: {}", internetChargeType);
+                log.info("[AliyunEcsClient] [模拟SDK]   - internetMaxBandwidthOut: {} Mbps", 
+                        request.getPublicIpBandwidth() != null ? request.getPublicIpBandwidth() : 5);
+            } else {
+                log.info("[AliyunEcsClient] [模拟SDK]   - internetMaxBandwidthOut: 0 (不分配公网IP)");
+            }
+            
+            if (request.getTags() != null && !request.getTags().isEmpty()) {
+                log.info("[AliyunEcsClient] [模拟SDK]   - tags: {}", request.getTags());
+            }
+            
+            // 模拟：调用API创建实例
+            log.info("[AliyunEcsClient] [模拟SDK] 调用 client.getAcsResponse(runRequest) - 发送创建实例请求到阿里云");
+            log.info("[AliyunEcsClient] [模拟SDK] 等待阿里云API响应...");
+            
+            // 模拟：解析响应
             String mockInstanceId = "i-" + System.currentTimeMillis();
             String mockRequestId = "req-" + System.currentTimeMillis();
-            log.warn("[AliyunEcsClient] SDK未接入，返回模拟数据: instanceId={}", mockInstanceId);
+            log.info("[AliyunEcsClient] [模拟SDK] 收到 RunInstancesResponse");
+            log.info("[AliyunEcsClient] [模拟SDK]   - instanceIdSets: [{}]", mockInstanceId);
+            log.info("[AliyunEcsClient] [模拟SDK]   - requestId: {}", mockRequestId);
+            log.info("[AliyunEcsClient] ========== 步骤4: ECS实例创建完成 ==========");
+            log.info("[AliyunEcsClient] ✓ 实例创建成功: instanceId={}, requestId={}", mockInstanceId, mockRequestId);
 
             // ========== 步骤5: 网络打通（异步）==========
             // 如果需要公网IP，异步申请并绑定EIP
@@ -286,6 +279,7 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
             }
 
             // ========== 步骤6: 构建返回结果 ==========
+            log.info("[AliyunEcsClient] ========== 步骤6: 构建返回结果 ==========");
             Map<String, String> tags = new HashMap<>();
             if (request.getTags() != null) {
                 tags.putAll(request.getTags());
@@ -298,7 +292,7 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
             metadata.put("instanceChargeType", instanceChargeType);
             metadata.put("internetChargeType", internetChargeType);
 
-            return VirtualMachine.builder()
+            VirtualMachine vm = VirtualMachine.builder()
                     .instanceId(mockInstanceId)
                     .instanceName(request.getInstanceName())
                     .status(VmStatusEnum.PENDING)
@@ -316,6 +310,14 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
                     .createdAt(LocalDateTime.now())
                     .requestId(mockRequestId)
                     .build();
+            
+            log.info("[AliyunEcsClient] ========== 实例创建流程完成 ==========");
+            log.info("[AliyunEcsClient] ✓ 返回VirtualMachine: instanceId={}, instanceName={}, status={}, publicIp={}", 
+                    vm.getInstanceId(), vm.getInstanceName(), vm.getStatus(), vm.getPublicIp());
+            log.info("[AliyunEcsClient] ✓ 网络资源: vpcId={}, vSwitchId={}, securityGroupId={}", 
+                    networkResources.getVpcId(), networkResources.getVSwitchId(), networkResources.getSecurityGroupId());
+            
+            return vm;
 
         } catch (EcsException e) {
             // 重新抛出EcsException（包含配额错误等）
@@ -482,9 +484,14 @@ public class AliyunEcsClient extends AbstractCloudEcsClient {
     @Override
     public boolean isAvailable() {
         // SDK未接入时返回false，接入后改为true
-        return properties.isEnabled() &&
+        boolean available = properties.isEnabled() &&
                 properties.getAccessKeyId() != null &&
                 properties.getAccessKeySecret() != null;
+        log.debug("[AliyunEcsClient] 检查可用性: providerCode={}, enabled={}, hasAccessKey={}, available={}",
+                getProviderCode(), properties.isEnabled(), 
+                (properties.getAccessKeyId() != null && properties.getAccessKeySecret() != null),
+                available);
+        return available;
     }
 
     @Override

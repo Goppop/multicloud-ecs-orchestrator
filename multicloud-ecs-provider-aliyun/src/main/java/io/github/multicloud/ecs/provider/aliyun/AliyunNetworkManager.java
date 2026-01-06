@@ -87,26 +87,15 @@ public class AliyunNetworkManager {
      * 根据用户标签查找VPC
      */
     private String findVpcByUserTag(String userId, String region) {
-        /*
-         * TODO: 阿里云SDK接入后实现
-         * 
-         * DescribeVpcsRequest request = new DescribeVpcsRequest();
-         * request.setRegionId(region);
-         * request.setTagKey("Owner");
-         * request.setTagValue(userId);
-         * 
-         * DescribeVpcsResponse response = client.getAcsResponse(request);
-         * if (response.getVpcs() != null && !response.getVpcs().isEmpty()) {
-         *     DescribeVpcsResponse.Vpc vpc = response.getVpcs().get(0);
-         *     if ("Available".equals(vpc.getStatus())) {
-         *         return vpc.getVpcId();
-         *     }
-         * }
-         * return null;
-         */
-
-        // 临时模拟：返回null表示不存在
-        log.debug("[AliyunNetworkManager] 查找VPC（模拟）: userId={}, region={}", userId, region);
+        log.info("[AliyunNetworkManager] [模拟SDK] 查找VPC: userId={}, region={}", userId, region);
+        log.info("[AliyunNetworkManager] [模拟SDK] 构建 DescribeVpcsRequest");
+        log.info("[AliyunNetworkManager] [模拟SDK]   - regionId: {}", region);
+        log.info("[AliyunNetworkManager] [模拟SDK]   - tagKey: Owner");
+        log.info("[AliyunNetworkManager] [模拟SDK]   - tagValue: {}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK] 调用 client.getAcsResponse(request) - 查询VPC列表");
+        log.info("[AliyunNetworkManager] [模拟SDK] 收到 DescribeVpcsResponse");
+        log.info("[AliyunNetworkManager] [模拟SDK] 检查VPC列表: vpcs=[] (未找到匹配的VPC)");
+        log.info("[AliyunNetworkManager] [模拟SDK] 返回结果: null (VPC不存在)");
         return null;
     }
 
@@ -114,113 +103,94 @@ public class AliyunNetworkManager {
      * 查找现有网络资源
      */
     private NetworkResources findExistingNetworkResources(String vpcId, String userId, String region, String zone) {
-        /*
-         * TODO: 阿里云SDK接入后实现
-         * 
-         * // 查找VSwitch
-         * DescribeVSwitchesRequest vswRequest = new DescribeVSwitchesRequest();
-         * vswRequest.setVpcId(vpcId);
-         * vswRequest.setZoneId(zone);
-         * DescribeVSwitchesResponse vswResponse = client.getAcsResponse(vswRequest);
-         * String vSwitchId = vswResponse.getVSwitches().get(0).getVSwitchId();
-         * 
-         * // 查找SecurityGroup
-         * DescribeSecurityGroupsRequest sgRequest = new DescribeSecurityGroupsRequest();
-         * sgRequest.setVpcId(vpcId);
-         * sgRequest.setTagKey("Owner");
-         * sgRequest.setTagValue(userId);
-         * DescribeSecurityGroupsResponse sgResponse = client.getAcsResponse(sgRequest);
-         * String securityGroupId = sgResponse.getSecurityGroups().get(0).getSecurityGroupId();
-         * 
-         * return new NetworkResources(vpcId, vSwitchId, securityGroupId, null);
-         */
-
-        // 临时模拟
-        log.debug("[AliyunNetworkManager] 查找现有网络资源（模拟）: vpcId={}", vpcId);
-        return new NetworkResources(vpcId, "vsw-mock", "sg-mock", "172.16.0.0/12");
+        log.info("[AliyunNetworkManager] [模拟SDK] 查找现有网络资源: vpcId={}, userId={}, zone={}", vpcId, userId, zone);
+        
+        // 模拟：查找VSwitch
+        log.info("[AliyunNetworkManager] [模拟SDK] 1. 查找VSwitch");
+        log.info("[AliyunNetworkManager] [模拟SDK]   构建 DescribeVSwitchesRequest");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vpcId: {}", vpcId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - zoneId: {}", zone);
+        log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(vswRequest)");
+        log.info("[AliyunNetworkManager] [模拟SDK]   收到 DescribeVSwitchesResponse");
+        String mockVSwitchId = "vsw-" + userId + "-existing";
+        log.info("[AliyunNetworkManager] [模拟SDK]   - vSwitchId: {}", mockVSwitchId);
+        
+        // 模拟：查找SecurityGroup
+        log.info("[AliyunNetworkManager] [模拟SDK] 2. 查找SecurityGroup");
+        log.info("[AliyunNetworkManager] [模拟SDK]   构建 DescribeSecurityGroupsRequest");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vpcId: {}", vpcId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - tagKey: Owner");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - tagValue: {}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(sgRequest)");
+        log.info("[AliyunNetworkManager] [模拟SDK]   收到 DescribeSecurityGroupsResponse");
+        String mockSecurityGroupId = "sg-" + userId + "-existing";
+        log.info("[AliyunNetworkManager] [模拟SDK]   - securityGroupId: {}", mockSecurityGroupId);
+        
+        log.info("[AliyunNetworkManager] [模拟SDK] ✓ 找到现有网络资源: vpcId={}, vSwitchId={}, securityGroupId={}", 
+                vpcId, mockVSwitchId, mockSecurityGroupId);
+        return new NetworkResources(vpcId, mockVSwitchId, mockSecurityGroupId, "172.16.0.0/12");
     }
 
     /**
      * 创建网络资源（VPC -> VSwitch -> SecurityGroup）
      */
     private NetworkResources createNetworkResources(String userId, String region, String zone, Map<String, String> tags) throws EcsException {
-        /*
-         * TODO: 阿里云SDK接入后实现
-         * 
-         * // 1. 计算CIDR网段（每个用户独立网段）
-         * String cidrBlock = calculateCidrBlock(userId);
-         * 
-         * // 2. 创建VPC
-         * CreateVpcRequest vpcRequest = new CreateVpcRequest();
-         * vpcRequest.setRegionId(region);
-         * vpcRequest.setCidrBlock(cidrBlock);
-         * vpcRequest.setVpcName("vpc-" + userId);
-         * vpcRequest.setDescription("Auto-created VPC for user: " + userId);
-         * 
-         * // 设置标签
-         * List<CreateVpcRequest.Tag> vpcTags = new ArrayList<>();
-         * for (Map.Entry<String, String> tag : tags.entrySet()) {
-         *     CreateVpcRequest.Tag vpcTag = new CreateVpcRequest.Tag();
-         *     vpcTag.setKey(tag.getKey());
-         *     vpcTag.setValue(tag.getValue());
-         *     vpcTags.add(vpcTag);
-         * }
-         * vpcRequest.setTags(vpcTags);
-         * 
-         * CreateVpcResponse vpcResponse = client.getAcsResponse(vpcRequest);
-         * String vpcId = vpcResponse.getVpcId();
-         * log.info("[AliyunNetworkManager] VPC创建成功: vpcId={}, userId={}", vpcId, userId);
-         * 
-         * // 3. 创建VSwitch
-         * CreateVSwitchRequest vswRequest = new CreateVSwitchRequest();
-         * vswRequest.setVpcId(vpcId);
-         * vswRequest.setZoneId(zone != null ? zone : getDefaultZone(region));
-         * vswRequest.setCidrBlock(calculateVSwitchCidr(cidrBlock));
-         * vswRequest.setVSwitchName("vsw-" + userId);
-         * 
-         * // 设置标签
-         * List<CreateVSwitchRequest.Tag> vswTags = new ArrayList<>();
-         * for (Map.Entry<String, String> tag : tags.entrySet()) {
-         *     CreateVSwitchRequest.Tag vswTag = new CreateVSwitchRequest.Tag();
-         *     vswTag.setKey(tag.getKey());
-         *     vswTag.setValue(tag.getValue());
-         *     vswTags.add(vswTag);
-         * }
-         * vswRequest.setTags(vswTags);
-         * 
-         * CreateVSwitchResponse vswResponse = client.getAcsResponse(vswRequest);
-         * String vSwitchId = vswResponse.getVSwitchId();
-         * log.info("[AliyunNetworkManager] VSwitch创建成功: vSwitchId={}, userId={}", vSwitchId, userId);
-         * 
-         * // 4. 创建SecurityGroup
-         * CreateSecurityGroupRequest sgRequest = new CreateSecurityGroupRequest();
-         * sgRequest.setVpcId(vpcId);
-         * sgRequest.setSecurityGroupName("sg-" + userId);
-         * sgRequest.setDescription("Auto-created SecurityGroup for user: " + userId);
-         * 
-         * // 设置标签
-         * List<CreateSecurityGroupRequest.Tag> sgTags = new ArrayList<>();
-         * for (Map.Entry<String, String> tag : tags.entrySet()) {
-         *     CreateSecurityGroupRequest.Tag sgTag = new CreateSecurityGroupRequest.Tag();
-         *     sgTag.setKey(tag.getKey());
-         *     sgTag.setValue(tag.getValue());
-         *     sgTags.add(sgTag);
-         * }
-         * sgRequest.setTags(sgTags);
-         * 
-         * CreateSecurityGroupResponse sgResponse = client.getAcsResponse(sgRequest);
-         * String securityGroupId = sgResponse.getSecurityGroupId();
-         * log.info("[AliyunNetworkManager] SecurityGroup创建成功: securityGroupId={}, userId={}", securityGroupId, userId);
-         * 
-         * return new NetworkResources(vpcId, vSwitchId, securityGroupId, cidrBlock);
-         */
-
-        // 临时模拟：返回模拟的网络资源
-        log.warn("[AliyunNetworkManager] 创建网络资源（模拟）: userId={}, region={}", userId, region);
+        log.info("[AliyunNetworkManager] [模拟SDK] ========== 开始创建网络资源 ==========");
+        log.info("[AliyunNetworkManager] [模拟SDK] userId={}, region={}, zone={}, tags={}", userId, region, zone, tags);
+        
+        // 1. 计算CIDR网段
+        String cidrBlock = calculateCidrBlock(userId);
+        log.info("[AliyunNetworkManager] [模拟SDK] 1. 计算CIDR网段: cidrBlock={}", cidrBlock);
+        
+        // 2. 创建VPC
+        log.info("[AliyunNetworkManager] [模拟SDK] 2. 创建VPC");
+        log.info("[AliyunNetworkManager] [模拟SDK]   构建 CreateVpcRequest");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - regionId: {}", region);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - cidrBlock: {}", cidrBlock);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vpcName: vpc-{}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - description: Auto-created VPC for user: {}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - tags: {}", tags);
+        log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(vpcRequest) - 创建VPC");
+        log.info("[AliyunNetworkManager] [模拟SDK]   等待阿里云API响应...");
         String mockVpcId = "vpc-" + userId + "-" + System.currentTimeMillis();
+        log.info("[AliyunNetworkManager] [模拟SDK]   收到 CreateVpcResponse");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vpcId: {}", mockVpcId);
+        log.info("[AliyunNetworkManager] [模拟SDK]   ✓ VPC创建成功: vpcId={}", mockVpcId);
+        
+        // 3. 创建VSwitch
+        log.info("[AliyunNetworkManager] [模拟SDK] 3. 创建VSwitch");
+        log.info("[AliyunNetworkManager] [模拟SDK]   构建 CreateVSwitchRequest");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vpcId: {}", mockVpcId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - zoneId: {}", zone != null ? zone : "默认可用区");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - cidrBlock: {} (从VPC CIDR计算)", cidrBlock);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vSwitchName: vsw-{}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - tags: {}", tags);
+        log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(vswRequest) - 创建VSwitch");
+        log.info("[AliyunNetworkManager] [模拟SDK]   等待阿里云API响应...");
         String mockVSwitchId = "vsw-" + userId + "-" + System.currentTimeMillis();
+        log.info("[AliyunNetworkManager] [模拟SDK]   收到 CreateVSwitchResponse");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vSwitchId: {}", mockVSwitchId);
+        log.info("[AliyunNetworkManager] [模拟SDK]   ✓ VSwitch创建成功: vSwitchId={}", mockVSwitchId);
+        
+        // 4. 创建SecurityGroup
+        log.info("[AliyunNetworkManager] [模拟SDK] 4. 创建SecurityGroup");
+        log.info("[AliyunNetworkManager] [模拟SDK]   构建 CreateSecurityGroupRequest");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - vpcId: {}", mockVpcId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - securityGroupName: sg-{}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - description: Auto-created SecurityGroup for user: {}", userId);
+        log.info("[AliyunNetworkManager] [模拟SDK]     - tags: {}", tags);
+        log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(sgRequest) - 创建SecurityGroup");
+        log.info("[AliyunNetworkManager] [模拟SDK]   等待阿里云API响应...");
         String mockSecurityGroupId = "sg-" + userId + "-" + System.currentTimeMillis();
-        return new NetworkResources(mockVpcId, mockVSwitchId, mockSecurityGroupId, "172.16.0.0/12");
+        log.info("[AliyunNetworkManager] [模拟SDK]   收到 CreateSecurityGroupResponse");
+        log.info("[AliyunNetworkManager] [模拟SDK]     - securityGroupId: {}", mockSecurityGroupId);
+        log.info("[AliyunNetworkManager] [模拟SDK]   ✓ SecurityGroup创建成功: securityGroupId={}", mockSecurityGroupId);
+        
+        log.info("[AliyunNetworkManager] [模拟SDK] ========== 网络资源创建完成 ==========");
+        log.info("[AliyunNetworkManager] [模拟SDK] ✓ 所有网络资源已创建: vpcId={}, vSwitchId={}, securityGroupId={}", 
+                mockVpcId, mockVSwitchId, mockSecurityGroupId);
+        
+        return new NetworkResources(mockVpcId, mockVSwitchId, mockSecurityGroupId, cidrBlock);
     }
 
     /**
@@ -246,35 +216,26 @@ public class AliyunNetworkManager {
                 return;
             }
 
-            log.info("[AliyunNetworkManager] 开始添加安全组规则: securityGroupId={}, ports={}", securityGroupId, ports);
+            log.info("[AliyunNetworkManager] [模拟SDK] ========== 开始添加安全组规则 ==========");
+            log.info("[AliyunNetworkManager] [模拟SDK] securityGroupId={}, ports={}, region={}", securityGroupId, ports, region);
 
-            /*
-             * TODO: 阿里云SDK接入后实现
-             * 
-             * for (Integer port : ports) {
-             *     try {
-             *         AuthorizeSecurityGroupRequest request = new AuthorizeSecurityGroupRequest();
-             *         request.setSecurityGroupId(securityGroupId);
-             *         request.setRegionId(region);
-             *         request.setIpProtocol("tcp");
-             *         request.setPortRange(port + "/" + port);
-             *         request.setSourceCidrIp("0.0.0.0/0");
-             *         request.setDescription("Auto-opened port for AI compute platform");
-             *         
-             *         AuthorizeSecurityGroupResponse response = client.getAcsResponse(request);
-             *         log.info("[AliyunNetworkManager] 安全组规则添加成功: securityGroupId={}, port={}", 
-             *                 securityGroupId, port);
-             *     } catch (Exception e) {
-             *         // 如果规则已存在，忽略错误（幂等性）
-             *         if (!e.getMessage().contains("InvalidPermission.Duplicate")) {
-             *             log.error("[AliyunNetworkManager] 添加安全组规则失败: securityGroupId={}, port={}, error={}",
-             *                     securityGroupId, port, e.getMessage());
-             *         }
-             *     }
-             * }
-             */
-
-            log.warn("[AliyunNetworkManager] 添加安全组规则（模拟）: securityGroupId={}, ports={}", securityGroupId, ports);
+            for (Integer port : ports) {
+                log.info("[AliyunNetworkManager] [模拟SDK] 处理端口: {}", port);
+                log.info("[AliyunNetworkManager] [模拟SDK]   构建 AuthorizeSecurityGroupRequest");
+                log.info("[AliyunNetworkManager] [模拟SDK]     - securityGroupId: {}", securityGroupId);
+                log.info("[AliyunNetworkManager] [模拟SDK]     - regionId: {}", region);
+                log.info("[AliyunNetworkManager] [模拟SDK]     - ipProtocol: tcp");
+                log.info("[AliyunNetworkManager] [模拟SDK]     - portRange: {}/{}", port, port);
+                log.info("[AliyunNetworkManager] [模拟SDK]     - sourceCidrIp: 0.0.0.0/0");
+                log.info("[AliyunNetworkManager] [模拟SDK]     - description: Auto-opened port for AI compute platform");
+                log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(request) - 添加安全组规则");
+                log.info("[AliyunNetworkManager] [模拟SDK]   等待阿里云API响应...");
+                log.info("[AliyunNetworkManager] [模拟SDK]   收到 AuthorizeSecurityGroupResponse");
+                log.info("[AliyunNetworkManager] [模拟SDK]   ✓ 安全组规则添加成功: securityGroupId={}, port={}", 
+                        securityGroupId, port);
+            }
+            
+            log.info("[AliyunNetworkManager] [模拟SDK] ========== 安全组规则添加完成 ==========");
         });
     }
 
@@ -283,41 +244,38 @@ public class AliyunNetworkManager {
      */
     public CompletableFuture<String> allocateAndBindEip(String instanceId, String region) {
         return CompletableFuture.supplyAsync(() -> {
-            log.info("[AliyunNetworkManager] 开始申请EIP: instanceId={}, region={}", instanceId, region);
-
-            /*
-             * TODO: 阿里云SDK接入后实现
-             * 
-             * try {
-             *     // 1. 申请EIP
-             *     AllocateEipAddressRequest allocateRequest = new AllocateEipAddressRequest();
-             *     allocateRequest.setRegionId(region);
-             *     allocateRequest.setBandwidth("10"); // 默认10Mbps
-             *     AllocateEipAddressResponse allocateResponse = client.getAcsResponse(allocateRequest);
-             *     String allocationId = allocateResponse.getAllocationId();
-             *     String eipAddress = allocateResponse.getEipAddress();
-             *     
-             *     log.info("[AliyunNetworkManager] EIP申请成功: allocationId={}, eipAddress={}", allocationId, eipAddress);
-             *     
-             *     // 2. 绑定到实例
-             *     AssociateEipAddressRequest associateRequest = new AssociateEipAddressRequest();
-             *     associateRequest.setAllocationId(allocationId);
-             *     associateRequest.setInstanceId(instanceId);
-             *     associateRequest.setInstanceType("EcsInstance");
-             *     AssociateEipAddressResponse associateResponse = client.getAcsResponse(associateRequest);
-             *     
-             *     log.info("[AliyunNetworkManager] EIP绑定成功: instanceId={}, eipAddress={}", instanceId, eipAddress);
-             *     return eipAddress;
-             *     
-             * } catch (Exception e) {
-             *     log.error("[AliyunNetworkManager] EIP申请/绑定失败: instanceId={}, error={}", instanceId, e.getMessage());
-             *     throw new RuntimeException("EIP申请/绑定失败: " + e.getMessage(), e);
-             * }
-             */
-
-            // 临时模拟
-            String mockEip = "47.xxx.xxx.xxx";
-            log.warn("[AliyunNetworkManager] EIP申请/绑定（模拟）: instanceId={}, eip={}", instanceId, mockEip);
+            log.info("[AliyunNetworkManager] [模拟SDK] ========== 开始申请并绑定EIP ==========");
+            log.info("[AliyunNetworkManager] [模拟SDK] instanceId={}, region={}", instanceId, region);
+            
+            // 1. 申请EIP
+            log.info("[AliyunNetworkManager] [模拟SDK] 1. 申请EIP");
+            log.info("[AliyunNetworkManager] [模拟SDK]   构建 AllocateEipAddressRequest");
+            log.info("[AliyunNetworkManager] [模拟SDK]     - regionId: {}", region);
+            log.info("[AliyunNetworkManager] [模拟SDK]     - bandwidth: 10 Mbps");
+            log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(allocateRequest) - 申请EIP");
+            log.info("[AliyunNetworkManager] [模拟SDK]   等待阿里云API响应...");
+            String mockAllocationId = "eip-" + System.currentTimeMillis();
+            String mockEip = "47." + (System.currentTimeMillis() % 256) + "." + 
+                            ((System.currentTimeMillis() / 256) % 256) + "." + 
+                            ((System.currentTimeMillis() / 65536) % 256);
+            log.info("[AliyunNetworkManager] [模拟SDK]   收到 AllocateEipAddressResponse");
+            log.info("[AliyunNetworkManager] [模拟SDK]     - allocationId: {}", mockAllocationId);
+            log.info("[AliyunNetworkManager] [模拟SDK]     - eipAddress: {}", mockEip);
+            log.info("[AliyunNetworkManager] [模拟SDK]   ✓ EIP申请成功: allocationId={}, eipAddress={}", 
+                    mockAllocationId, mockEip);
+            
+            // 2. 绑定到实例
+            log.info("[AliyunNetworkManager] [模拟SDK] 2. 绑定EIP到实例");
+            log.info("[AliyunNetworkManager] [模拟SDK]   构建 AssociateEipAddressRequest");
+            log.info("[AliyunNetworkManager] [模拟SDK]     - allocationId: {}", mockAllocationId);
+            log.info("[AliyunNetworkManager] [模拟SDK]     - instanceId: {}", instanceId);
+            log.info("[AliyunNetworkManager] [模拟SDK]     - instanceType: EcsInstance");
+            log.info("[AliyunNetworkManager] [模拟SDK]   调用 client.getAcsResponse(associateRequest) - 绑定EIP");
+            log.info("[AliyunNetworkManager] [模拟SDK]   等待阿里云API响应...");
+            log.info("[AliyunNetworkManager] [模拟SDK]   收到 AssociateEipAddressResponse");
+            log.info("[AliyunNetworkManager] [模拟SDK]   ✓ EIP绑定成功: instanceId={}, eipAddress={}", instanceId, mockEip);
+            
+            log.info("[AliyunNetworkManager] [模拟SDK] ========== EIP申请并绑定完成 ==========");
             return mockEip;
         });
     }

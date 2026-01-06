@@ -1,6 +1,5 @@
 package io.github.multicloud.ecs.provider.aliyun;
 
-import io.github.multicloud.ecs.core.registry.CloudEcsClientRegistry;
 import io.github.multicloud.ecs.core.util.TenantTagInjector;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -9,7 +8,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -26,9 +24,6 @@ import javax.annotation.Resource;
 public class AliyunEcsAutoConfiguration {
 
     @Resource
-    private CloudEcsClientRegistry registry;
-
-    @Resource
     private AliyunEcsProperties properties;
 
     @Resource
@@ -40,6 +35,7 @@ public class AliyunEcsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AliyunNetworkManager aliyunNetworkManager() {
+        log.info("[AliyunEcsAutoConfiguration] 创建阿里云网络资源管理器Bean");
         return new AliyunNetworkManager(properties);
     }
 
@@ -49,32 +45,25 @@ public class AliyunEcsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AliyunParameterMapper aliyunParameterMapper() {
+        log.info("[AliyunEcsAutoConfiguration] 创建阿里云参数映射器Bean");
         return new AliyunParameterMapper(properties);
     }
 
     /**
      * 创建阿里云ECS客户端Bean
+     * 
+     * 注意：客户端会自动注册到 CloudEcsClientRegistry
+     * 由 MultiCloudEcsAutoConfiguration.autoRegisterClients() 方法自动处理
      */
     @Bean
     @ConditionalOnMissingBean
     public AliyunEcsClient aliyunEcsClient(AliyunNetworkManager networkManager, 
                                            AliyunParameterMapper parameterMapper) {
-        return new AliyunEcsClient(properties, networkManager, parameterMapper, tenantTagInjector);
-    }
-
-    /**
-     * 启动时自动注册到Registry
-     */
-    @PostConstruct
-    public void registerClient() {
-        if (properties.isEnabled()) {
-            AliyunNetworkManager networkManager = new AliyunNetworkManager(properties);
-            AliyunParameterMapper parameterMapper = new AliyunParameterMapper(properties);
-            AliyunEcsClient client = new AliyunEcsClient(properties, networkManager, parameterMapper, tenantTagInjector);
-            registry.register(client);
-            log.info("[AliyunEcsAutoConfiguration] 阿里云ECS客户端已注册: providerCode={}, region={}",
-                    properties.getProviderCode(), properties.getRegionId());
-        }
+        log.info("[AliyunEcsAutoConfiguration] 创建阿里云ECS客户端Bean: providerCode={}, providerName={}, region={}",
+                properties.getProviderCode(), properties.getProviderName(), properties.getRegionId());
+        AliyunEcsClient client = new AliyunEcsClient(properties, networkManager, parameterMapper, tenantTagInjector);
+        log.info("[AliyunEcsAutoConfiguration] 阿里云ECS客户端Bean创建完成，等待自动注册到Registry");
+        return client;
     }
 }
 

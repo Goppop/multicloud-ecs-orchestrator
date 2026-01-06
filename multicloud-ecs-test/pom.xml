@@ -24,6 +24,12 @@
             <artifactId>multicloud-ecs-starter</artifactId>
         </dependency>
 
+        <!-- 引入阿里云 Provider（可选依赖，需要显式引入） -->
+        <dependency>
+            <groupId>io.github.multicloud</groupId>
+            <artifactId>multicloud-ecs-provider-aliyun</artifactId>
+        </dependency>
+
         <!-- Spring Boot Web Starter（用于创建 REST API 测试） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
