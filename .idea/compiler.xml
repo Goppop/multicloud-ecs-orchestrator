@@ -10,6 +10,7 @@
         <module name="multicloud-ecs-api" />
         <module name="multicloud-ecs-starter" />
         <module name="multicloud-ecs-core" />
+        <module name="multicloud-ecs-test" />
       </profile>
     </annotationProcessing>
   </component>

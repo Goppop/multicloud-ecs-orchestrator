@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/multicloud-ecs-provider-aliyun/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/multicloud-ecs-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/multicloud-ecs-starter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/multicloud-ecs-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/multicloud-ecs-test/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

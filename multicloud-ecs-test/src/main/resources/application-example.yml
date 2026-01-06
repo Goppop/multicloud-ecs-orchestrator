@@ -1,0 +1,35 @@
+# 配置文件示例
+# 复制此文件为 application.yml 并填入实际的配置值
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: multicloud-ecs-test
+
+# 多云ECS框架配置
+multicloud:
+  ecs:
+    enabled: true
+    scheduler-type: fixed
+    default-provider: ALIYUN
+
+    # 阿里云配置
+    aliyun:
+      enabled: true
+      region-id: cn-hangzhou
+      # 请从阿里云控制台获取 AccessKey
+      # 访问路径: https://ram.console.aliyun.com/manage/ak
+      access-key-id: YOUR_ACCESS_KEY_ID
+      access-key-secret: YOUR_ACCESS_KEY_SECRET
+      
+      # 以下配置为可选，如果不配置框架会自动创建
+      # vpc-id: vpc-xxxxx
+      # v-switch-id: vsw-xxxxx
+      # security-group-id: sg-xxxxx
+
+logging:
+  level:
+    io.github.multicloud.ecs: DEBUG
+

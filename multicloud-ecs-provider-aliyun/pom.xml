@@ -24,19 +24,26 @@
             <artifactId>multicloud-ecs-core</artifactId>
         </dependency>
 
-        <!-- 
-        阿里云 SDK 依赖（待接入后启用）
+        <!-- 阿里云 SDK 依赖（新版本） -->
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-ecs</artifactId>
-            <version>4.24.60</version>
+            <artifactId>alibabacloud-ecs20140526</artifactId>
+            <version>8.0.30</version>
         </dependency>
+        <!-- 阿里云 VPC SDK（用于网络资源管理）- 暂时注释，待找到正确版本后启用 -->
+
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>4.6.3</version>
+            <artifactId>alibabacloud-vpc20160428</artifactId>
+            <version>5.1.1</version>
         </dependency>
-        -->
+
+        <!-- 阿里云 Tea 核心库 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>tea-openapi</artifactId>
+            <version>0.3.8</version>
+        </dependency>
 
         <!-- Spring Boot -->
         <dependency>

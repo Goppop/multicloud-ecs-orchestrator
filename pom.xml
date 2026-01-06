@@ -22,6 +22,7 @@
         <module>multicloud-ecs-core</module>
         <module>multicloud-ecs-provider-aliyun</module>
         <module>multicloud-ecs-starter</module>
+        <module>multicloud-ecs-test</module>
     </modules>
 
     <properties>

@@ -1,0 +1,9 @@
+# 忽略包含敏感信息的配置文件
+application.yml
+application-local.yml
+application-dev.yml
+application-prod.yml
+
+# 保留示例配置文件
+!application-example.yml
+
